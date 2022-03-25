@@ -77,3 +77,20 @@ app.route('/api/:id').delete((req, res) => {
 
   res.json('Deleted User')
 })
+
+// Quando não encontra rota, entra aqui:
+app.use((req, res, next) => {
+  const erro = new Error('Não encontrado');
+  erro.status = 404;
+  next(erro);
+})
+
+// Tratando erros
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  return res.send({
+    erro: {
+      mensagem: error.message
+    }
+  });
+});
